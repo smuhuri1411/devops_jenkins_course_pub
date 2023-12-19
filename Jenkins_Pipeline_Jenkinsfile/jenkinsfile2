@@ -1,0 +1,65 @@
+pipeline{
+    agent any
+
+    environment{
+        release = "19.2"
+    }
+
+    stages{
+        stage('Checkout'){
+            steps{
+                script{
+
+                    def gitRepo = 'https://github.com/smuhuri1411/devops_jenkins_course_pub.git'
+
+                    checkout([
+                        $classs: 'GitSCM',
+                        branches: [[name: '*/main']],
+                        userRemoteConfigs: [[url: gitRepo]],
+                        extensions: [[$class: 'CleanBeforeCheckout'], [$class: 'CloneOption', noTags: false, shallow: true, depth: 1]]
+                    ])
+                }
+            }
+        }
+
+        stage('Build'){
+
+            environment{
+                log_level = "Info"
+            }
+
+            steps{
+                sh '''
+                    ls
+                    echo "Currently in Build Phase.."
+                    echo "Release: "$release""
+                    echo "Log Level: "$log_level""
+                '''
+            }
+        }
+
+        stage('Test'){
+
+            environment{
+                log_level = "testing"
+            }
+            steps{
+                sh 'echo "This is the Testing Phase.."'
+                sh '''
+                    echo "Log Level for Testing Phase: "$log_level""
+                '''
+            }        
+
+        }
+    }
+
+    post{
+        success{
+            echo "The pipeline is successfull!!"
+        }
+
+        failure{
+            echo "Need to fix the pipeline.."
+        }
+    }
+}
