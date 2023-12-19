@@ -13,7 +13,7 @@ pipeline{
                     def gitRepo = 'https://github.com/smuhuri1411/devops_jenkins_course_pub.git'
 
                     checkout([
-                        $classs: 'GitSCM',
+                        $class: 'GitSCM',
                         branches: [[name: '*/main']],
                         userRemoteConfigs: [[url: gitRepo]],
                         extensions: [[$class: 'CleanBeforeCheckout'], [$class: 'CloneOption', noTags: false, shallow: true, depth: 1]]
