@@ -27,7 +27,7 @@ pipeline{
                 sh '''
                     ls
                     echo 'In the Build Phase!!'
-                    echo 'The value of the env variable is "$variable1"'
+                    echo "The value of the env variable is "$variable1""
                     echo "Will Move on to Test Phase after this.."
                 '''
             }
