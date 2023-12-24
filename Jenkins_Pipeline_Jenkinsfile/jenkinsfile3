@@ -19,7 +19,7 @@ pipeline{
                     checkout([$class: 'GitSCM',
                     branches: [[name: '*/main']],
                     userRemoteConfigs: [[url: getrepo]],
-                    extentions: [[$class: 'CleanBeforeCheckout'], [$class: 'CloneOptions', noTags: false, shallow: true, depth: 1]]
+                    extentions: [[$class: 'CleanBeforeCheckout'], [$class: 'CloneOption', noTags: false, shallow: true, depth: 1]]
                     ])
                 }
 
