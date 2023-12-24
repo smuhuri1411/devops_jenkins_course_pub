@@ -17,9 +17,9 @@ pipeline{
                     def gitrepo = "https://github.com/smuhuri1411/devops_jenkins_course_pub.git"
                     
                     checkout([$class: 'GitSCM',
-                    $branches: [[$name: '*/main']],
-                    $userRemoteConfigs: [[$url: 'getrepo']],
-                    $extentions: [[$class: 'CleanBeforeCheckout'], [$class: 'CloneOptions', noTags: false, shallow: true, depth: 1]]
+                    branches: [[name: '*/main']],
+                    userRemoteConfigs: [[url: getrepo]],
+                    extentions: [[$class: 'CleanBeforeCheckout'], [$class: 'CloneOptions', noTags: false, shallow: true, depth: 1]]
                     ])
                 }
 
