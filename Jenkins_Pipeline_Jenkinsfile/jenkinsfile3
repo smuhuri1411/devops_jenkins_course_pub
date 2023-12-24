@@ -36,7 +36,7 @@ pipeline{
                 }
 
                 steps{
-                    sh 'scho "In the $phase_name phase.. Moving on.."'
+                    sh 'echo "In the $phase_name phase.. Moving on.."'
                 }
             }
 
