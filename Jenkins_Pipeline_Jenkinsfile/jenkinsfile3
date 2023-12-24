@@ -14,7 +14,7 @@ pipeline{
 
                     script{
 
-                    def gitrepo = "https://github.com/smuhuri1411/devops_jenkins_course_pub.git"
+                    def gitrepo = 'https://github.com/smuhuri1411/devops_jenkins_course_pub.git'
                     
                     checkout([$class: 'GitSCM',
                     branches: [[name: '*/main']],
