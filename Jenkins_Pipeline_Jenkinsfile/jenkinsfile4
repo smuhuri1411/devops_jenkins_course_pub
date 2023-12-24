@@ -1,0 +1,84 @@
+pipeline{
+    agent any
+
+    environment{
+        release = 24.12
+    }
+
+    stages{
+        stage('Checkout'){
+            script{
+
+                def gitrepo = 'https://github.com/smuhuri1411/devops_jenkins_course_pub.git'
+
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/main']],
+                    userRemoteConfigs: [[url: gitrepo]],
+                    extentions: [[$class: 'CleanBeforeCheckout'], [$class: 'CloneOption', noTags: false, shallow: true, depth: 1]]
+                ])
+            }
+        }
+
+        stage('Build'){
+            parallel{
+                stage('win-64'){
+                    agent any
+                    environment{
+                        os = "windows-64bit"
+                    }
+                    steps{
+                        sh 'echo "Building application release v$release in $os"'
+                    }
+                }
+
+                stage('linux-arm64'){
+                    agent any
+                    environment{
+                        os = "Linux-arm64"
+                    }
+
+                    steps{
+                        sh 'echo "Building application release v$release in $os"'
+                    }
+                }
+
+                stage('linux-amd64'){
+                    agent any 
+                    environment{
+                        os = "Linux-AMD64"
+                    }
+
+                    steps{
+                        sh 'echo "Building application release v$release in $os"'
+                    }
+                }
+
+                steps{
+                    sh 'echo "Build compleyed in all operating systems. Proceeding ..."'
+                }
+            }
+        }
+
+        stage('Deploy'){
+
+            input{
+                message 'Check Before Deployment'
+                ok 'Please Proceed'
+                parameters{
+                    string(name: 'Target_Env', defaultValue: 'Prod', description: 'Target Deployment Environment')
+                    string(name: 'version', defaultValue: '', description: 'Release Version')
+                }
+            }
+            steps{
+                sh 'echo "Deploying Release $version in $Target_Env environment"'
+            }
+        }
+    }
+
+    post{
+        always{
+            echo "Pipeline is always successfull!!"
+        }
+    }
+}
