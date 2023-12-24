@@ -55,7 +55,7 @@ pipeline{
 
                 steps{
                     sh '''
-                        ln
+                        ls -l
                         echo "We are in the $phase_name phase and deploying $release version in the $Target_Env environment"
                     '''
                 }
