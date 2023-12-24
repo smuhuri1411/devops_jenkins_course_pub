@@ -1,0 +1,76 @@
+pipeline{
+
+    agent any
+
+        environment{
+            release = 24.12
+        }
+
+        stages{
+            stage('Checkout'){
+                agent any
+
+                steps{
+
+                    script{
+
+                    def gitrepo = "https://github.com/smuhuri1411/devops_jenkins_course_pub.git"
+                    
+                    checkout([$class: 'GitSCM',
+                    $branches: [[$name: '*/main']],
+                    $userRemoteConfigs: [[$url: 'getrepo']],
+                    $extentions: [[$class: 'CleanBeforeCheckout'], [$class: 'CloneOptions', noTags: false, shallow: true, depth: 1]]
+                    ])
+                }
+
+                sh 'echo "Checkout Completed!!"'
+
+                }
+            }
+
+            stage('Compile'){
+                agent any
+                environment{
+                    phase_name="Compilation"
+                }
+
+                steps{
+                    sh 'scho "In the $phase_name phase.. Moving on.."'
+                }
+            }
+
+            stage('Build'){
+                environment{
+                    phase_name="Build"
+                }
+
+                input{
+                    message "Deploy?"
+                    ok "Do It"
+                    parameters{
+                        string(name: 'Target_Env', defaultValue: 'Production', description: 'Target deployment environment')
+                    }
+                }
+
+                steps{
+                    sh '''
+                        ln
+                        echo "We are in the $phase_name phase and deploying $release version in the $Target_Env environment"
+                    '''
+                }
+            }
+        
+
+    }
+
+    post{
+        success{
+            sh 'echo "Pipeline Successded.."'
+        }
+
+        failure{
+            sh 'echo "Pipeline Failed, Please check!!"'
+        }
+    }
+
+}
