@@ -7,6 +7,9 @@ pipeline{
 
     stages{
         stage('Checkout'){
+
+            steps{
+
             script{
 
                 def gitrepo = 'https://github.com/smuhuri1411/devops_jenkins_course_pub.git'
@@ -17,6 +20,7 @@ pipeline{
                     userRemoteConfigs: [[url: gitrepo]],
                     extentions: [[$class: 'CleanBeforeCheckout'], [$class: 'CloneOption', noTags: false, shallow: true, depth: 1]]
                 ])
+            }
             }
         }
 
