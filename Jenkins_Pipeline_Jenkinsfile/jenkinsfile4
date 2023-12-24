@@ -61,9 +61,6 @@ pipeline{
                 
                 }
 
-                steps{
-                    sh 'echo "Build compleyed in all operating systems. Proceeding ..."'
-            }
         }
 
         stage('Deploy'){
