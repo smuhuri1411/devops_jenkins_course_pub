@@ -1,0 +1,73 @@
+pipeline{
+    agent any
+
+    environment{
+        int_version = '1.0.0'
+        release_version = 'R.1'
+    }
+
+    stages{
+        stage('Checkout'){
+            steps{
+
+                script{
+                    def gitrepo = 'https://github.com/smuhuri1411/devops_jenkins_course_pub.git'
+
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: '*/main']],
+                        userRemoteConfigs: [[url: gitrepo]],
+                        extentions: [[$class: 'CleanBeforeCheckout'],[$class: 'CloneOption', noTags: false, shallow: true, depth: 1]]
+                    ])
+                }
+                
+
+            }
+        }
+
+
+        stage('Audit Tools'){
+            steps{
+                echo "Checking all necessary softwares are installed for the BUild Process"
+
+                sh '''
+                    git --version
+                    java -version
+                    mvn -version
+                '''
+            }
+        }
+
+        stage('Unit Test'){
+            steps{
+                echo "Starting the unite test"
+
+                dir('./maven-samples/single-module'){
+                    sh '''
+                        mvn test
+                    '''
+                }
+            }
+        }
+
+        stage('Build'){
+            steps{
+                echo "Starting the Build of release: "$release_version" with suffix: "$int_version".. "
+
+                dir('./maven-samples/single-module'){
+                    sh 'mvn clean package'
+                }
+            }
+        }
+    }
+
+    post{
+        success{
+            echo "Pipeline Successfull!!"
+        }
+
+        failure{
+            echo "Pipeline failed!!"
+        }
+    }
+}
