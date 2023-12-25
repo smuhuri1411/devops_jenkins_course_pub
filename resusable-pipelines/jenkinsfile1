@@ -62,12 +62,8 @@ pipeline{
     }
 
     post{
-        success{
-            echo "Pipeline Successfull!!"
-        }
-
-        failure{
-            echo "Pipeline failed!!"
+        always{
+            cleanws()
         }
     }
 }
