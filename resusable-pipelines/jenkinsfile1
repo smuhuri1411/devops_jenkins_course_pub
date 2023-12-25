@@ -52,7 +52,7 @@ pipeline{
 
         stage('Build'){
             steps{
-                echo "Starting the Build of release: "$release_version" with suffix: "$int_version".. "
+                echo "Starting the Build of release: $release_version with suffix: $int_version.. "
 
                 dir('./maven-samples/single-module'){
                     sh 'mvn clean package'
