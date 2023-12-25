@@ -42,7 +42,7 @@ pipeline{
             steps{
                 echo "Starting the unite test"
 
-                dir('./maven-samples/single-module'){
+                dir('./java-tomcat-sample'){
                     sh '''
                         mvn test
                     '''
@@ -54,7 +54,7 @@ pipeline{
             steps{
                 echo "Starting the Build of release: $release_version with suffix: $int_version.. "
 
-                dir('./maven-samples/single-module'){
+                dir('./java-tomcat-sample'){
                     sh 'mvn clean package'
                 }
             }
