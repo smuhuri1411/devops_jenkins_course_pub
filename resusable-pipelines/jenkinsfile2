@@ -19,9 +19,9 @@ pipeline{
 
         stage('Unit Test'){
             
-            dir('./java-tomcat-sample'){
-                steps{
-                sh '''
+            steps{
+                dir('./java-tomcat-sample'){
+                 sh '''
                     mvn validate
                     mvn compile
                     mvn test
