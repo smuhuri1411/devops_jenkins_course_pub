@@ -37,7 +37,7 @@ pipeline{
                 dir('./java-tomcat-sample'){
                 sh '''
                     mvn versions:set -DnewVersion="${int_version}"-SNAPSHOT
-                    mvn versions:update-child-module
+                    mvn versions:update-child-modules
                     mvn clean package
                 '''
             }
