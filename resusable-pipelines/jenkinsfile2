@@ -34,11 +34,11 @@ pipeline{
         stage('Build'){
             steps{
                 echo "Building App with integrated version ${int_version} for release ${release_version}.."
-
+                dir('./java-tomcat-sample'){
                 sh '''
                     mvn versions:set -DnewVersion="${int_version}"-SNAPSHOT
                     mvn versions:update-child-module
-                    mvn -f java-tomcat-sample/pom.xml clean package
+                    mvn clean package
                 '''
             }
         }
