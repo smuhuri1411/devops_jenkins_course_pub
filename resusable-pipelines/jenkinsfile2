@@ -1,0 +1,46 @@
+pipeline{
+    agent any
+
+    environment{
+        int_version = '1.1.0'
+        release_version = 'R.1'
+    }
+
+    stages{
+        stage('Audit Tools'){
+            steps{
+                sh '''
+                    git --version
+                    mvn -version
+                    java -version
+                '''
+            }
+        }
+
+        stage('Unit Test'){
+            
+            dir('./java-tomcat-sample'){
+                steps{
+                sh '''
+                    mvn validate
+                    mvn compile
+                    mvn test
+                '''
+                }
+            }
+            
+        }
+
+        stage('Build'){
+            steps{
+                echo "Building App with integrated version ${int_version} for release ${release_version}.."
+
+                sh '''
+                    mvn versions:set -DnewVersion="${int_version}"-SNAPSHOT
+                    mvn versions:update-child-module
+                    mvn -f java-tomcat-sample/pom.xml clean package
+                '''
+            }
+        }
+    }
+}
