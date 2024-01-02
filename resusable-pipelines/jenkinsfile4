@@ -15,8 +15,9 @@ pipeline{
         }
 
         stage('Unit Test'){
-           dir('./java-tomcat-sample'){ 
+            
             steps{
+                dir('./java-tomcat-sample'){
                 unitTest()
             }
          }
@@ -29,8 +30,9 @@ pipeline{
                 version_suffix = getBuildVersion()
             }
 
-            dir('./java-tomcat-sample'){
+            
                 steps{
+                    dir('./java-tomcat-sample'){
                     packageApplication()
                 }
             }
