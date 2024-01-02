@@ -60,7 +60,7 @@ String getBuildVersion(){
 void packageApplication(){
     sh '''
         mvn versions:set -DnewVersions="${version_suffix}"-SNAPSHOT
-        mvn versions:update-child-module
+        mvn versions:update-child-modules
         mvn clean package
     '''
 }
