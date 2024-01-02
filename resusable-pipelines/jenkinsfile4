@@ -1,0 +1,75 @@
+pipeline{
+    agent any 
+
+    parameters{
+        booleanParam(name: "release", defaultValue: false, description: "Is this a release candidate?")
+        string(name: "int_version", description: "Version for integrated release")
+        string(name: "rel_version", description: "Release Version")
+    }
+
+    stages{
+        stage('Audit Tools'){
+            steps{
+                auditTools()
+            }
+        }
+
+        stage('Unit Test'){
+           dir('./java-tomcat-sample'){ 
+            steps{
+                unitTest()
+            }
+         }
+        }
+
+        stage('Build'){
+            
+            environment{
+
+                version_suffix = getBuildVersion()
+            }
+
+            dir('./java-tomcat-sample'){
+                steps{
+                    packageApplication()
+                }
+            }
+        }
+    }
+}
+
+
+String getBuildVersion(){
+    if (params.release){
+        return params.rel_version + ':' + env.build_number
+    }
+
+    else{
+        return params.int_version + 'ci:' + env.build_number
+    }
+}
+
+void packageApplication(){
+    sh '''
+        mvn versions:set -DnewVersions="${version_suffix}"-SNAPSHOT
+        mvn versions:update-child-module
+        mvn clean package
+    '''
+}
+
+void auditTools(){
+        sh '''
+            git --version
+            java -version
+            mvn -version
+
+        '''
+    }
+
+    void unitTest(){
+        sh '''
+            mvn validate
+            mvn compile
+            mvn test
+        '''
+    }
