@@ -40,7 +40,7 @@ pipeline{
 
         stage('Publish'){
             steps{
-                archiveArtifact('**/*.war')
+                archiveArtifacts('**/*.war')
             }
         }
     }
