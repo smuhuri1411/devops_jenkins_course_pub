@@ -1,0 +1,83 @@
+pipeline{
+    agent any
+
+    environment{
+        int_version = "2.1.2024"
+        rel_version = "R1-2024"
+    }
+
+    parameters{
+        booleanParam(name: "RELEASE", defaultValue: "false", description: "Is this a release candidate?")
+    }
+
+    stages{
+        stage('Audit Tools'){
+            steps{
+                auditTools()
+            }
+        }
+
+        stage('Compilation'){
+            steps{
+                dir('./java-tomcat-sample'){
+                unitTest()
+                }
+            }
+        }
+        
+        stage('Build'){
+            
+            environment{
+                version_suffix = getBuildVersion()
+            }
+
+            steps{
+                dir('./java-tomcat-sample'){
+                    buildApplication()
+                }    
+            }
+        }
+
+        stage('Publish'){
+            steps{
+                archiveArtifact('**/*.war')
+            }
+        }
+    }
+
+    String getBuildVersion(){
+        if(params.release){
+            return env.rel_version + ':' + env.build_number
+        }
+        else{
+            return env.int_version + 'ci:' + env.build_number
+        }
+    }
+
+
+    void auditTools(){
+        sh '''
+            git --version
+            java -version
+            mvn -version
+
+        '''
+    }
+
+    void unitTest(){
+        sh '''
+            mvn validate
+            mvn compile
+            mvn test
+        '''
+    }
+
+    void buildApplication(){
+        sh '''
+
+            mvn versions:set -DnewVersion="${version_suffix}"-SNAPSHOT
+            mvn versions:update-child-modules
+            mvn clean package
+        '''
+    }
+}
