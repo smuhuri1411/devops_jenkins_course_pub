@@ -3,8 +3,8 @@ pipeline{
 
     parameters{
         booleanParam(name: "release", defaultValue: false, description: "Is this a release candidate?")
-        string(name: "int_version", defaultValue: "2024.1.2", description: "Version for integrated release")
-        string(name: "rel_version", defaultValue: "R1/2-2024", description: "Release Version")
+        string(name: "int_version", defaultValue: '2024.1.2', description: "Version for integrated release")
+        string(name: "rel_version", defaultValue: 'R1/2-2024', description: "Release Version")
     }
 
     stages{
