@@ -49,7 +49,7 @@ pipeline{
 
 
 String getBuildVersion(){
-        if(params.release){
+        if(params.RELEASE){
             return env.rel_version + ':' + env.build_number
         }
         else{
