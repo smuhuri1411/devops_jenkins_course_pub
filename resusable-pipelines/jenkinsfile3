@@ -45,7 +45,10 @@ pipeline{
         }
     }
 
-    String getBuildVersion(){
+}
+
+
+String getBuildVersion(){
         if(params.release){
             return env.rel_version + ':' + env.build_number
         }
@@ -80,4 +83,3 @@ pipeline{
             mvn clean package
         '''
     }
-}
